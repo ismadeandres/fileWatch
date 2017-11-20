@@ -71,7 +71,7 @@ func main() {
 
 	for e := range evaluation {
 		if len(e) > 0 {
-			fmt.Printf("there are some result on the channel\n")
+			fmt.Printf("there are some results on the channel\n")
 		}
 	}
 
@@ -97,16 +97,12 @@ func monitor(t tsk, evaluation chan []threshold) error {
 		t := threshold{thname: ""}
 		ths := []threshold{}
 		ths = append(ths, t)
-		//th := threshold{thname: "asdasasa"}
-		readCSV("ejieSinks/director-1-1-A_ejie_LKVPLEX40_com_stats.csv", ths)
+
+		readCSV("example_stats.csv",ths)
 
 		evaluation <- ths
 	}
 	return nil
-	//read fields
-	//identify thresholds on fields
-	//check thresholds
-
 }
 
 func readCSV(file string, thresholds []threshold) ([]string, error) {
@@ -146,16 +142,7 @@ func readCSV(file string, thresholds []threshold) ([]string, error) {
 	}
 
 	return []string{header[1]}, nil
-	/*
-		scanner := bufio.NewScanner(f)
-		for scanner.Scan() {
-			//fmt.Println(scanner.Text())
-		}
-		if err := scanner.Err(); err != nil {
-			fmt.Errorf("there is an error scanning contents of %s [ %s ]\n", file, err)
-		}
-		return []string{"terwr"}, nil
-	*/
+
 }
 
 func parseConfig() config {
@@ -178,4 +165,14 @@ func parseConfig() config {
 	return c
 }
 
-type operator struct{}
+type operator int
+
+const(
+	less = iota
+	lessOrEqual
+	equal
+	biggerOrEqual
+	bigger
+	notEqual
+	distinct // for strings purposes
+)
